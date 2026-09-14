@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ticker Rail</title>
+<meta name="description" content="Personal watchlist — last price, move since added, one tap to the chart.">
+<meta name="theme-color" content="#23345e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ticker Rail">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAFmklEQVR4nO3dPXJURxiF4W9U3olZAlQ5YC2GhAxiewl2bGdOkNZCQJW0BGktEMDIVzP3p//769PvU+XAKmvmBq+OezQD92QO/Pr692+9rwH5nh7uTr2vocsFEPAcegTe7AmJeG6t4q76JESMNTXjrvLAhIwQNcK+Kf2AxIxQNVop9hNCyMhRaq2LLDQxI1ephrJ+KggZNeSsdfJCEzNqyWkrKWhiRm2pjUUHTcxoJaW1qKCJGa3FNhccNDGjl5j2goImZvQW2uBh0MQML0JaLP7WN9DTbtCsM7w5anIzaGKGV3ttcuSAlNWgWWd4t9XoVdDEjFGstcqRA1JeBM06YzSXzbLQkELQkPIcNMcNjGrZLgsNKQQNKTdmHDcwvnPDLDSkEDSkEDSknDg/QwkLDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSm/9L4AjOntP2+vvvbl05cOV/ISH05ClLWQL/UMm6ARJCTkSz3C5gyNQykx53xfDpdn6I9//HX1tX///rPDlWA07hZ6Lea9r6Ou3JVtvdKugj6KlqhxxE3QobESdTul1rXlSrsJGiiBoCGFoCGFoCHFTdChv2fm99HtlHqnr+U7hm6CNjuOlZhxxFXQZtvREnMfueva+vMcLt/6Jl4/Hu9v7f3X/3pfRjB3Cw1/Pv/2Ien7enzajo+PYtPj/e3V10LWuufnoV0eOeDXea3XwuZPrMCttXW+9OrNuwZXEoczNKQQNK6Mus5mBI0LITF7RtCI5nWdzQgaC6OvsxlBI5LndTYjaPw08gvBJYKGFIKGzDqbEfT0FF4ILhE0Do2yzmYEPTW1dTYjaBwYaZ3NCHpaSi8ElwgaUgh6QqrrbEbQ01F8IbhE0Lgy6jqbEfRUlI8aZwQNKS7/1Df3WClvhnU2cxj03j1WRo/6MqpWAam/EFxydeRQvsfKVlReYlNYZzNHQSvfY+Uo5ppRe/mBacVN0KpCg+oZnso6mxG0K6WjnuWF4BJBV5QS6GxHhNIIupKcMB/vb7PDnnGdzRwFrXSPlVIrm/o4M6+8m6DNNO6x0uMcnEJxnc2cBW029j1WasUX87gzr7OZw3cKzcaIt7XH+9tiq6q6zmYOF3pULZbx6DlmfSG4RNAFxMb86s27539qP9dsCDpTSsx7/576nKzzDwSdITfmo6+HPjer/T9uGpSoVMw5j1n6+RWw0I7MEl1NBJ2gxjqn/Lc9H9Mrgo5UM+ac72nxWCMg6AgtYi7xvTMj6EAtYy71GDP+UBB0gB4xLx9rxjBTEfQgYqOe9YeAoA/0XOeWj62CoHd4ijnmOWYOn3cKN3iMeWnt+mYO+YygV3iPGds4clwg5rERNKQQ9ALrPD6C/omYNRC0EbOS6YMmZi1TB03Melz+vRzckgKp3C303i0pSmKdNbkKutUtKYhZl5ugW96Sovef8UM9boJujU+taZo2aLP9YIl5TFMHbUa4aqYP2qzM3zcHH9wE3fuWFOeIiXls7j7gv/dbDN5cwRE3C3028i0p0J+7hQZyuFtoIAdBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQwpBQ8rN08PdqfdFACU8PdydWGhIIWhIIWhIuTH7cfbofSFAjnPDLDSkEDSkPAfNsQOjWrbLQkMKQUPKi6A5dmA0l82y0JByFTQrjVGstbq60EQN77Ya5cgBKZtBs9Lwaq/N3YUmanhz1CRHDkg5DJqVhhchLQYtNFGjt9AGg48cRI1eYtqLOkMTNVqLbS76RSFRo5WU1pJ+y0HUqC21seRf2xE1aslpq0iU3LwTJZQYySJvrLDWyFWqoeIhstaIUXoMi7/1zVojVI1WqsbHWmNNzdFrtqbEPbdW/+fucjwg7jn0OH66OO8SuAYPr5++A6HREJW1WxzVAAAAAElFTkSuQmCC">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Ticker%20Rail%22%2C%22short_name%22%3A%22Ticker%20Rail%22%2C%22description%22%3A%22Personal%20watchlist%20with%20live%20prices%20and%20move%20since%20added.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23edeff2%22%2C%22theme_color%22%3A%22%2323345e%22%2C%22start_url%22%3A%22.%2F%22%2C%22scope%22%3A%22.%2F%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAGJ0lEQVR4nO3dP3IcNxDF4SbLN5GOIFUp0FkkJ86s2D6CHNuZE5NnUeAq8gjkWeTAWtZwdv5h0AAaeL8vUlHS7gTvoQezs5wbC%2BbNu0%2FfWx8Dynl%2BvL9pfQxTTQ%2BGsMOsbSmqvzGhx5baZaj2ZgQfKWoVofibEHzkKF2EYi9O8OGpVBHcX5TgoyTvItx6vhjhR2neGXNpE8FHCx7TIHsCEH604pG9rAIQfrSWm8HTBSD8iCIni6cKQPgRzdlMJheA8COqM9lMKgDhR3SpGT1cAMKPXqRk9VABCD96czSzuwUg%2FOjVkey63goB9GazAKz%2B6N1ehlcLQPgxiq0scwoEaYsFYPXHaNYyzQSAtKsCsPpjVEvZZgJA2qsCsPpjdPOMMwEg7aUArP5QMc06EwDSKACk3Zpx%2BgM9l8wzASCNAkAaBYA0CgBpN2yAoYwJAGkUANIoAKRRAEijAJBGASCNAkAaBYA0CgBpFADSfmp9ABjTxz8%2Frv7dty%2FfKh7JNu4Fgqut4M9FKAKnQHCTEv4z%2F74ECgAXZ8PcugQUANlyQ9yyBOH3AL%2F%2B9vXqZ3%2F98XuDI8ESz%2FC22BOEngBL4d%2F6OZAqbAH2Qk4J2vM%2BdWlxKhSyAEfDTQmQK2QBgFooAKRRAEijAJAWsgBHr%2FPzeQByhSyA2X64CX973h9c8UHYzFrICT%2B8hL8VArE9PdzZz%2F%2F%2Bnf06rW6NDj0B0Id%2FPvyS9f9bfi%2BAAuC0p4e7lz%2BfLUHrL8VQALhJLUHr8JuxB8BJ09V%2Fyda%2BIELwL%2FhSPIq4TIO37z83PpJtnAIh2d7qfxE9%2FGYUAImOhr8XFABF9LD6m1EAJBht9TejACigl9XfjALgoJE2vlMUANIoAHaNuvqbUQDsGHHjO0UB4KLH1d%2BMAmDD6Ku%2FGQWAg15XfzMKgBUjb3ynKACkUQBcUVn9zSgAxFEAvKK0%2BptRAEwoXPacowBINsrqb0YB8IPaqc8FBYA0CgDZ1d%2Bsg1%2BLwmNSUVLoX4y19RC80UowXYVrrrTKq79Z4AIceQLkCCXYCmDp0KVc9hy1ACH3ACqPSd0LYJTr8qOG3yxoARQcDXepEkQpV2sUoIHU8LUM68irvxkF6IZnCdQ3vlMUoLKcID893HHq4ixkAUZ9TKpXeHNLdITC6m8WtABm4z0m1XvlPvN6TI9rYQtgNs5jUnu7kqOy%2Bpt1cCtEb2Gv7enh7lBgWf2XhZ4AI6gRPM%2F3UFr9zShAUanBzAnf1nux8V1HAQo5G%2F637z%2BfDiKnOekoQABLgfcqAav%2FNgpQgNdKnFsCJsK%2BsLdD96rEeX%2FpIKuu%2FmZMAFelNr3KAS2NAjgpfcWnVAnUy0UBOuIdVvXwm1EAFzWv9xNaXxQgU83wR3uNEVCADC3CX%2BK1lHEZ9KSW4Z%2BLdCy9YQIMgECfRwFOiLji8pnCORQgUcTwt3ivUVCABJHDP3%2FP%2BXvn3GU6MjbBB%2FUQfqRjAkAaBTiA1X9cFGAH4R8bBdhA%2BMdHAZwQ%2Fj5RgBV8nVADBVjAqY8OCjBD%2BLWE%2F9WINZ8SSfj1hJ4Aa88A6%2F3ZYIgjbAH2Qu5dAlZ%2FTSELUPspkYRfV8gC1JYSaMI%2FFgrww5HbhQn%2FeCjADCHXQgEWLE0DijGmkAWI8pTItW9XYRyhvxG2dZWHZ4fBQ8gJcDHKUyIRV%2BgJAJQWegIApVEASKMAkEYBII0CQBoFgDQKAGkUANIoAKRRAEijAJBGASCNAkAaBYA0CgBpt8%2BP9zetDwJo4fnx%2FoYJAGkUANIoAKRRAEi7Nft%2FM9D6QICaLplnAkAaBYC0lwJwGgQV06wzASDtVQGYAhjdPONMAEi7KgBTAKNayjYTANIWC8AUwGjWMs0EgLTVAjAFMIqtLG9OAEqA3u1lmFMgSNstAFMAvTqS3UMTgBKgN0cze%2FgUiBKgFylZTdoDUAJEl5rR5E0wJUBUZ7J56ioQJUA0ZzN5%2BjIoJUAUOVnM%2BhyAEqC13AxmfxBGCdCKR%2FZcw%2Fvm3afvnq8HLPFcdF1vhWAaoDTvjBULLNMAnkotrsVXbIqAHKXPKqqdslAEpKh1Ol39nJ0iYEvtfWTTTStlgFnbiyfhrtpQirFFu1L4HzWdMJp0SSF3AAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAATa0lEQVR4nO3dO5Ik1ZIG4Cisd9IsoTEbgbU0o4zGlWEJIF%2B0UQbWgjBmsARYS4%2FQk3R2db4i8jzcj3%2BfyqNOnBL%2B3z2yql42Qnr77v2H2WcAaOHvP397mX0GvuSbMomAB%2FhIQZjDpQ8g7AH2UQr6c8EdCHyAthSC9lxoAwIfYCyF4Hku8CChDxCDMnCMS9tB6APEpgw8zkXdIfQBclIGbnM5Vwh%2BgDUoApe5lDNCH2BtysAnLmIT%2FADVKALFC4DgB6itchEo%2BeCCH4BzFYtAqQcW%2FADcUqkIlHhQwQ%2FAHhWKwFezD9Cb8AdgrwrZsWzDqfDNA6C%2FVbcByz2U4Aegh9WKwFKvAIQ%2FAL2sljFLtJnVvikAxLbCNiD9BkD4AzDaCtmTugCs8A0AIKfsGZRyhZH90gFYS8ZXAuk2AMIfgGgyZlOqApDxggGoIVtGpVhZZLtUAGrL8Eog%2FAZA%2BAOQTYbsCl0AMlwgAFwSPcPCFoDoFwcA90TOspAFIPKFAcAeUTMtXAGIelEAcFTEbAtVACJeEAC0EC3jwhSAaBcDAK1FyroQBSDShQBAT1Eyb3oBiHIRADBKhOybWgAiXAAAzDA7A6cVgNkPDgCzzczCKQVA%2BAPAR7MycXgBEP4A8LkZ2Ti0AAh%2FALhsdEYOKwDCHwBuG5mVQwqA8AeAx4zKzOm%2FBwAAGK97ATD9A8A%2BI7KzawEQ%2FgBwTO8M7VYAhD8APKdnlvoMAAAU1KUAmP4BoI1emdq8AAh%2FAGirR7Y2LQDCHwD6aJ2xPgMAAAU1KwCmfwDoq2XWNikAwh8AxmiVuV4BAEBBTxcA0z8AjNUie20AAKCgpwqA6R8A5ng2gw8XAOEPAHM9k8VeAQBAQYcKgOkfAGI4msk2AABQ0O4CYPoHgFiOZLMNAAAUtKsAmP4BIKa9GW0DAAAFPVwATP8AENuerLYBAICCHioApn8AyOHRzLYBAICCFAAAKOhuAbD%2BB4BcHsluGwAAKOhmATD9A0BO9zLcBgAAClIAAKCgqwXA%2Bh8AcruV5TYAAFCQAgAABV0sANb%2FALCGa5luAwAABSkAAFDQFwXA%2Bh8A1nIp220AAKAgBQAAClIAAKCgzwqA9%2F8AsKbXGW8DAAAFKQAAUJACAAAF%2FVMAvP8HgLWdZ70NAAAUpAAAQEEKAAAUpAAAQEFfbZsPAAJAFafMtwEAgIIUAAAoSAEAgIIUAAAoSAEAgIIUAAAoSAEAgIJe%2FA4AAKjHBgAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKAgBQAAClIAAKCgN7MPAMAavv33tw%2F%2Fu7%2F%2F6%2FeOJ%2BERL2%2Ffvf8w%2BxAA5LMn8O9RCMZTAADYpWXwv6YIjKMAAPCQnsH%2FmiLQnwIAwE0jg%2F81RaAfPwUAwFUzwz%2FC11%2BZAgDARVHCN8o5VuMVAACfiRy4Xgm0YwMAwD8ih%2F%2B2xT9fJgoAANu25QnXLOeMTgEAgIIUAADSTdXZzhuRAgBQXNYwzXruKBQAgMKyh2j288%2FkrwEm9P0PP139Z7%2F8%2FOPAkwCQld8DkMSt0L9GGQBuWWl69vsB9vMKIIEj4f%2FMfwfA%2BmwAAmsZ4LYBwLmVpv8TW4B9bACCaj292wYAcE4BCKhXWCsBwLatOf1v27rP1YsCAAAFKQDB9J7SbQEA2DYFIJRR4awEAKAAABSy%2Bnvy1Z%2BvJQUAAApSAIIYvZb3GgCgNgUAAApSAACgIAUAAApSAACgIAUAAApSAACgIAUgiNF%2FrtefBwaoTQEAgIIUAIBCfv%2FX77OP0NXqz9eSAhDIqLW89T8ACkAwvcNZ%2BAOwbQoAAJSkAATUa0o3%2FQPbtu578lWfqxcFIKjWYS38ATj38vbd%2Bw%2BzD8Ftz%2FzpXsEPXPPtv7%2BdfYRmTP%2F72QAkcDTEhT8A19gAJHRrIyD0gT1W2AKY%2Fo95M%2FsA7CfkAXiWVwAAhf3Pf%2FzX7CM8xfR%2FnAIAUNRff%2Fy6bVveEiD8n6MAABR0Cv%2BTbCVA%2BD9PAQCAghQAgGJeT%2F8nWbYApv82FAAA%2FhG9BAj%2FdvweAIBCrk3%2Fl%2Fzn%2F%2F53x5PsI%2FjbswEA4KIo2wDh34cCAFDEnun%2FZHYJEP79eAUAUMCR8H9t5CsBwd%2BfXwUMwENO24CeRUDwj2MDALC4FtP%2FJS2LgOAfzwYAgENefz5gTyEQ%2BPPZAAAsrNf0%2F6ivv%2Flu6tfnOj8FAEAXwj82BQBgUTOnf%2BEfnwIAAAUpAAALMv1zjwIAsJjZH%2FwjBwUAgGZM%2F3koAAALMf3zKAUAgCZM%2F7koAACL8ME%2F9lAAAKAgBQBgAaZ%2F9lIAAJLzwT%2BOUAAAOMz0n5cCAJCY6Z%2BjFAAADjH956YAACRl%2BucZCgAAu5n%2B81MAABLyY388SwEASMbqnxYUAAAeZvpfhwIAkIjpn1YUAAAeYvpfiwIAkITpn5YUAADuMv2vRwEASMCP%2FdGaAgAABSkAAMGZ%2FulBAQAIzAf%2F6EUBAOAi0%2F%2FaFACAoEz%2F9KQAAPAF0%2F%2F6FACAgHzwj94UAAAoSAEACMb0zwgKAEAgPvjHKAoAANu2mf6rUQAAgjD9M5ICAIDpvyAFACAA0z%2BjKQAAxZn%2Ba1IAACbzY3%2FMoAAAQEEKAMBEpn9mUQAAJvHBP2ZSAAAKMv2jAABMYPpnNgUAoBjTP9umAAAM54N%2FRKAAAEBBCgDAQKZ%2FolAAAAbxwT8iUQAACjD985oCADCA6Z9oFACAxZn%2BuUQBAOjMB%2F%2BISAEAgIIUAICOTP9EpQAAdOKDf0SmAAAsyPTPPW9mH4D9vv%2Fhp6v%2F7Jeffxx4EuAa0z%2FRKQBJ3Ar9a%2F%2BeMsAzbgWY6TI23x8e8fL23fsPsw%2FBbY%2BG%2FyVKAHscmVqFzZdmT%2F%2B%2BJzxCAQjsmeB%2FTRHgnmdCS%2BB8zif%2FyUABCKpl%2BJ8oAVzTKrCEj%2FAnDz8FEFCP8O%2F5%2FyW3loE1e%2FUNPE4BgKL%2B%2BuPXLoFduQSY%2FslEAQim95RuC8C29Q%2BqiiWg4jOTmwIQyKhwVgJqGxVUAnEc0z9HKABAN1VKQJXnZC0KABQyI6h6fdaAj0z%2FHKUABDF6Le81QD2zQ3j21%2B%2FFB%2F%2FISgGAAqKEb5RzAAoALC9a6EY7zzNM%2F2SmAADDrVACVngGalMAYGGRQyry2aIz%2FdOCAgCLyhCwGc54SdZzwzkFABaUKaAynTUC0z%2BtKABBjP5Lff4y4LoyBmqmM2c6K9yiAAAhCNb7TP%2B0pADAQrKHaPTfGujH%2FliJAhDIqLW89f%2BaIgfnXhGfJeKZ4BkKQDC9w1n4r2nFcFrxmY4y%2FdODAgDJrRyUUZ4tyjmgJQUgoF5TuumfjKqHr%2BmfXhSAoFqHtfBfU5VwnPmcVe6Yel7evnv%2FYfYhuO2ZP90r%2BNdVMZhmTMM%2B%2Bc%2BqbAASOBriwn9dFcN%2F28Y%2Ft%2FBnZW9mH4DHnIf5rY2A0F9f1fA%2F%2BeuPX4UjNOAVACRTvQCc9C4Bpn9W5xUAJCL8P%2Bn5WwPdMxUoAJCEULpstXsx%2FTOKAgAJrBZyrbW8H3dNFQoABCeQHrPCPZn%2BGUkBgMBWCLWRnr0vH%2FyjEgUAeMjX33yXIqSUJniMAgBBRQ2yVUuA6Z9qFAAIKFr4vw6oDIG15w6j3TeMoABAMNHC6FrYr1YCZslwj6xJAYBAogXWvXDKEF737jTancMoCgBw0aPhnuHDgT1%2Fa%2BAzot8ba1MAIIiIAbVHhjB7fcfZ7xyeoQBAANGC6GiYZywBs2S4K9bmrwHCZFEC6aRFMEV7pmiEPxHYAMBE0YKyVTAJOIhPAQC2bWsf2krAZe6FKBQAmCTa9N%2BDsIO4FACYIFr49wxqJeATd0EkCgAMVin8R34NYB8FAAaqGP4zvlZE1Z%2BfeBQAKGpGIGX4rYE9VHxm4lMAYJBI0%2F%2FsQJr99QEFAIaIFP5RVCkBVZ6TfBQA6Cxa%2BEcKpEhngWoUAOhI%2BN8X8UytrPxs5KcAQBGRwyjy2WBVCgB0Emn6zxCwGc64x2rPw3oUAOggUvhnskporvIcrE0BgMaihX%2B2MMp2XshKAYCGhH8bWc%2B9bbnPTi0KACwqexBV%2Fa2BMIoCAI1Emv5XCs5Mz5LprKAAQAORwn9FghXaUwDgSdHCf9WwjP5c0c8HrykA8AThP9bqzwcjKQCwiCrhGPE5I54J7lEA4KBI03%2B1AIr0vJHOAnsoAHBApPCvSvDCcxQA2Cla%2BFcOwtnPPvvrwzMUANhB%2BMfjDuAYBQCSEnyfzPitge6f7BQAeFCk6V%2F4XOZe4HEKADwgUvhz24gSoGiwAgUA7ogW%2FsLnvp535P5ZhQIANwj%2FvHrclftnJQoAJCF89mt5Z%2B6f1by8fff%2Bw%2BxDQESRpn%2Fh87xnvp%2FunxXZAMAFkcKfNo6GuPBnVTYA8Eq08BdAfdz6PrtzKlAA4IzwB6rwCgCCEv5ATwoA%2FL9I07%2FwB3pTAGCLFf4AIygAlBct%2FE3%2FwAgKAKUJf6AqBYCyhD9QmQIAAQh%2FYDQFgJKiTf8AoykAlBMt%2FE3%2FwAwKAKUIf4CPFADKEP4AnygAMIHwB2ZTACgh2vQPMJsCwPKihb%2FpH4hAAWBpwh%2FgMgWAZQl%2FgOsUABhA%2BAPRKAAsKdr0DxCNAsByooW%2F6R%2BISAFgKcIf4DEKAMsQ%2FgCPUwCgA%2BEPRPdm9gHY7%2Fsffrr6z375%2BceBJ4kj0vQv%2FIEMFIAkboX%2BtX%2BvShmIFP4AWXgFkMCj4d%2Fqv8skWvib%2FoEsXt6%2Be%2F9h9iG4rGWAr7gNEP4Ax9kABNV6eq%2BwDZhJ%2BAPZKAAB9QrrlUpApOlf%2BAMZKQCkEyn8AbJSAILpPaWvsAWINHFHOgvAHgpAIKPCWQlY5wwARykApPX1N99NC2HhD2SnAJDe6DAW%2FsAKFIAgRq%2FlV3gNcE4oA%2ByjALCMESVA0QBWoQCwlJ6fCxD%2BwEoUAJbUOqyFP7AaBYBltQpt4Q%2BsSAFgacIb4DIFgOU987kABQJYlQIQxOg%2F17vinwe%2BZ2%2BYC39gZQoApTwa6sIfWJ0CQDn3wl34AxUoAIGMWstXXP%2B%2FNvPvCABEoAAE0zuchf%2FnXpcApQCoQgGgvFPoC3%2Bgkpe3795%2FmH0IvtTjj%2FWY%2FgE4sQEIqnVYC38AztkAJPDMNkDwA3CJDUACR0Nc%2BANwjQ1AQrc2AkIfgEcoAABQkFcAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABX3195%2B%2Fvcw%2BBAAwzt9%2F%2FvZiAwAABSkAAFCQAgAABSkAAFCQAgAABSkAAFCQAgAABX21bR9%2FHnD2QQCA%2Fk6ZbwMAAAUpAABQkAIAAAUpAABQ0D8FwAcBAWBt51lvAwAABSkAAFCQAgAABX1WAHwOAADW9DrjbQAAoCAFAAAKUgAAoKAvCoDPAQDAWi5luw0AABSkAABAQRcLgNcAALCGa5luAwAABSkAAFDQ1QLgNQAA5HYry20AAKAgBQAACrpZALwGAICc7mW4DQAAFHS3ANgCAEAuj2S3DQAAFKQAAEBBDxUArwEAIIdHM9sGAAAKergA2AIAQGx7stoGAAAK2lUAbAEAIKa9GW0DAAAF7S4AtgAAEMuRbLYBAICCDhUAWwAAiOFoJtsAAEBBhwuALQAAzPVMFj%2B1AVACAGCOZzPYKwAAKOjpAmALAABjtcheGwAAKKhJAbAFAIAxWmVusw2AEgAAfbXMWq8AAKCgpgXAFgAA%2Bmidsc03AEoAALTVI1u7vAJQAgCgjV6Z6jMAAFBQtwJgCwAAz%2BmZpV03AEoAABzTO0O7vwJQAgBgnxHZ6TMAAFDQkAJgCwAAjxmVmcM2AEoAANw2MiuHvgJQAgDgstEZOfwzAEoAAHxuRjZO%2BRCgEgAAH83KxGk%2FBaAEAFDdzCyc%2BmOASgAAVc3OwOm%2FB2D2BQDAaBGyb3oB2LYYFwEAI0TJvBAFYNviXAgA9BIp68IUgG2LdTEA0FK0jAtVALYt3gUBwLMiZlu4ArBtMS8KAI6ImmkhC8C2xb0wAHhU5CwLWwC2LfbFAcAt0TMsdAHYtvgXCACvZciu8Ac89%2Fbd%2Bw%2BzzwAA12QI%2FpPwG4BzmS4WgFqyZVSqArBt%2BS4YgPVlzKZ0Bz7nlQAAM2UM%2FpN0G4BzmS8egNyyZ1DqArBt%2Bb8BAOSzQvakf4BzXgkA0NMKwX%2BSfgNwbqVvDACxrJYxSz3MOdsAAFpYLfhPlnyoc4oAAEesGvwnS70CuGT1byAA7VXIjuUf8JxtAAC3VAj%2BkzIPek4RAOBcpeA%2FKffA5xQBgNoqBv9J2Qc%2FpwgA1FI5%2BE%2FKX8A5RQBgbYL%2FExdxhTIAsAahf5lLuUMRAMhJ8N%2FmcnZQBgBiE%2FqPc1EHKQMAMQj9Y1xaA8oAwFhC%2F3kusAOFAKAtgd%2BeCx1AIQDYR%2BD354InUQoAPhL2c7j0oBQEYBUCPqb%2FAz%2FrtHFoSJ5GAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%5D%7D">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Familjen+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #edeff2; --surface: #ffffff; --surface-2: #f5f6f9;
+    --ink: #12151c; --muted: #6b7280; --line: #d7dae1; --line-soft: #e6e8ee;
+    --accent: #2f4a86; --accent-ink: #ffffff; --accent-soft: #e2e7f3;
+    --up: #0f7a52; --up-bg: #dcefe5; --down: #b0402a; --down-bg: #f7e2dc; --danger: #b0402a;
+    --shadow: 0 1px 2px rgba(18,21,28,.05), 0 12px 28px -18px rgba(18,21,28,.38);
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0d0f14; --surface: #161a22; --surface-2: #1d222c;
+      --ink: #e6e9f0; --muted: #8b93a3; --line: #2a303c; --line-soft: #222834;
+      --accent: #8fabe6; --accent-ink: #101728; --accent-soft: #1d2536;
+      --up: #5fc79a; --up-bg: #16302a; --down: #ea8a72; --down-bg: #34211d; --danger: #ea8a72;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 30px -20px rgba(0,0,0,.85);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d0f14; --surface: #161a22; --surface-2: #1d222c;
+    --ink: #e6e9f0; --muted: #8b93a3; --line: #2a303c; --line-soft: #222834;
+    --accent: #8fabe6; --accent-ink: #101728; --accent-soft: #1d2536;
+    --up: #5fc79a; --up-bg: #16302a; --down: #ea8a72; --down-bg: #34211d; --danger: #ea8a72;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 30px -20px rgba(0,0,0,.85);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 620px; margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: calc(26px + env(safe-area-inset-top)) calc(48px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 5px; }
+  .eyebrow { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: "Familjen Grotesk", "Archivo", sans-serif; font-weight: 700; font-size: clamp(28px, 7vw, 35px); letter-spacing: -.02em; line-height: 1.05; margin: 0; text-wrap: balance; }
+  .sub { color: var(--muted); font-size: 13.5px; margin: 0; max-width: 48ch; }
+
+  form.add { display: grid; grid-template-columns: 112px 1fr auto; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; box-shadow: var(--shadow); }
+  @media (max-width: 460px) { form.add { grid-template-columns: 112px 1fr; } form.add .btn-add { grid-column: 1 / -1; } }
+  select, input[type="text"] { font: inherit; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: 7px; padding: 9px 10px; min-width: 0; width: 100%; appearance: none; }
+  select { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12.5px;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 15px) 51%, calc(100% - 10px) 51%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 26px; }
+  #symbol { font-family: "IBM Plex Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: .03em; }
+  #symbol::placeholder { text-transform: none; letter-spacing: 0; font-family: "Archivo", sans-serif; }
+  :is(select, input, button, a, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  .btn-add { background: var(--accent); color: var(--accent-ink); border-radius: 7px; padding: 9px 16px; font-weight: 600; }
+  .btn-add:hover { filter: brightness(1.08); }
+  .hint { font-size: 12.5px; color: var(--muted); margin: -6px 2px 0; min-height: 17px; }
+  .hint.warn { color: var(--danger); }
+
+  .listwrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .listbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px 8px 13px; border-bottom: 1px solid var(--line-soft); background: var(--surface-2); }
+  .listbar .left { display: flex; flex-direction: column; gap: 1px; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); }
+  .listbar .asof.stale { color: var(--down); }
+  .btn-refresh { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink); border-radius: 7px; padding: 7px 13px; font-weight: 600; font-size: 13px; white-space: nowrap; }
+  .btn-refresh[disabled] { opacity: .6; cursor: default; }
+  .btn-refresh svg { display: block; }
+  .btn-refresh.busy svg { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  ul { list-style: none; margin: 0; padding: 0; }
+  li.row { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto 28px 26px; align-items: center; gap: 8px; padding: 10px 12px 10px 6px; border-bottom: 1px solid var(--line-soft); background: var(--surface); }
+  li.row:last-child { border-bottom: none; }
+  li.row.dragging { box-shadow: var(--shadow); border-radius: 8px; position: relative; z-index: 2; }
+
+  .handle { width: 16px; height: 32px; display: grid; place-items: center; color: var(--muted); opacity: .45; cursor: grab; touch-action: none; border-radius: 5px; }
+  .handle:active { cursor: grabbing; }
+  .handle svg { display: block; }
+
+  .main { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  a.sym { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 15px; color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; align-self: flex-start; max-width: 100%; overflow-wrap: anywhere; }
+  a.sym:hover { color: var(--accent); border-bottom-color: currentColor; }
+  .meta { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+  .meta .ex { font-family: "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .06em; background: var(--line-soft); padding: 1px 5px; border-radius: 4px; }
+  .entry { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; cursor: text; border-bottom: 1px dotted var(--line); white-space: nowrap; }
+  .entry:hover { color: var(--ink); border-bottom-color: var(--muted); }
+  input.entry-edit { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; width: 92px; padding: 1px 4px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--accent); color: var(--ink); }
+  .err { color: var(--down); font-size: 10.5px; }
+
+  .nums { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+  .last { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; font-weight: 600; font-size: 14.5px; white-space: nowrap; }
+  .last.none { color: var(--muted); font-weight: 400; }
+  .delta { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 500; padding: 1px 5px; border-radius: 4px; white-space: nowrap; background: var(--line-soft); color: var(--muted); }
+  .delta.up { background: var(--up-bg); color: var(--up); }
+  .delta.down { background: var(--down-bg); color: var(--down); }
+
+  .icon-btn { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; color: var(--muted); text-decoration: none; }
+  a.icon-btn { color: var(--accent); background: var(--accent-soft); }
+  .del:hover { color: var(--danger); background: var(--line-soft); }
+  .empty { padding: 28px 18px; text-align: center; color: var(--muted); font-size: 14px; }
+
+  .undo { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 13px; background: var(--surface-2); border-top: 1px solid var(--line-soft); font-size: 13px; color: var(--muted); }
+  .undo button { color: var(--accent); font-weight: 600; font-size: 13px; padding: 3px 8px; border-radius: 6px; }
+
+  footer { color: var(--muted); font-size: 12.5px; display: flex; flex-direction: column; gap: 10px; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
+  details summary { cursor: pointer; color: var(--ink); font-weight: 500; font-size: 13px; list-style: none; display: flex; align-items: center; gap: 7px; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "+"; font-family: "IBM Plex Mono", monospace; color: var(--muted); }
+  details[open] summary::before { content: "\2212"; }
+  details .body { padding: 10px 0 2px; display: flex; flex-direction: column; gap: 10px; }
+  label.field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+  label.field input { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; }
+  .relaybox { display: flex; flex-direction: column; gap: 8px; padding: 10px; background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: 8px; }
+  .relayhead { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase; color: var(--ink); }
+  .relayhead span { color: var(--muted); letter-spacing: .04em; text-transform: none; }
+  #testOut { display: flex; flex-direction: column; gap: 3px; }
+  .relayline { display: flex; justify-content: space-between; gap: 10px; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11.5px; color: var(--muted); }
+  .relayline .ok { color: var(--up); }
+  .relayline .bad { color: var(--down); }
+  .relayline .pending { opacity: .6; }
+  .maprow { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: center; font-size: 12px; }
+  .maprow span { font-family: "IBM Plex Mono", ui-monospace, monospace; color: var(--ink); overflow-wrap: anywhere; }
+  .maprow input { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; padding: 5px 7px; }
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11.5px; background: var(--line-soft); padding: 1px 5px; border-radius: 4px; }
+  .toolbtn { align-self: flex-start; font-size: 12.5px; color: var(--accent); background: var(--accent-soft); padding: 6px 11px; border-radius: 6px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Watchlist &middot; last price &middot; move since added</div>
+    <h1>Ticker Rail</h1>
+    <p class="sub">Tap a symbol for its live TradingView chart. Refresh pulls the last traded price for every name and measures it against the price when you added it.</p>
+  </header>
+
+  <form class="add" id="addForm" autocomplete="off">
+    <select id="exchange" aria-label="Exchange">
+      <optgroup label="India"><option value="NSE" selected>NSE</option><option value="BSE">BSE</option></optgroup>
+      <optgroup label="US"><option value="NASDAQ">NASDAQ</option><option value="NYSE">NYSE</option><option value="AMEX">AMEX</option></optgroup>
+      <optgroup label="Other equity"><option value="LSE">LSE</option><option value="TSE">TSE</option><option value="HKEX">HKEX</option><option value="EURONEXT">EURONEXT</option></optgroup>
+      <optgroup label="FX &amp; macro"><option value="FX_IDC">FX_IDC</option><option value="FX">FX</option><option value="OANDA">OANDA</option><option value="TVC">TVC</option></optgroup>
+      <optgroup label="Futures &amp; crypto"><option value="CME_MINI">CME_MINI</option><option value="COMEX">COMEX</option><option value="NYMEX">NYMEX</option><option value="BINANCE">BINANCE</option></optgroup>
+      <option value="">No prefix</option>
+    </select>
+    <input type="text" id="symbol" placeholder="Symbol — e.g. RELIANCE, or paste NSE:RELIANCE" aria-label="Ticker symbol" spellcheck="false">
+    <button type="submit" class="btn-add">Add</button>
+  </form>
+  <p class="hint" id="hint"></p>
+
+  <div class="listwrap">
+    <div class="listbar">
+      <span class="left">
+        <span id="count">0 tickers</span>
+        <span class="asof" id="asof">no prices yet</span>
+      </span>
+      <button type="button" class="btn-refresh" id="refreshBtn">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 8a6 6 0 1 1-1.8-4.3"/><path d="M14 2v4h-4"/></svg>
+        <span id="refreshLabel">Refresh</span>
+      </button>
+    </div>
+    <ul id="list"></ul>
+    <div id="undoSlot"></div>
+  </div>
+
+  <footer>
+    <details id="settings">
+      <summary>Settings &amp; symbol mapping</summary>
+      <div class="body">
+        <div class="relaybox">
+          <div class="relayhead">Quote relay <span id="relayNow">—</span></div>
+          <div>Prices come from Yahoo Finance, which a browser can't call directly. The app works through relays and falls back down the list on its own — you shouldn't have to touch this.</div>
+          <label class="field">
+            <span>Your own relay (tried first — paste a Cloudflare Worker URL ending in <code>?url=</code>)</span>
+            <input type="text" id="proxyInput" spellcheck="false" placeholder="https://ticker-relay.you.workers.dev/?url=">
+          </label>
+          <button type="button" class="toolbtn" id="testBtn">Test relays</button>
+          <div id="testOut"></div>
+        </div>
+        <div id="mapWrap"></div>
+        <button type="button" class="toolbtn" id="copyBtn">Copy list</button>
+      </div>
+    </details>
+    <div>Saved on this device, in this browser. Add to Home Screen for an app icon.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var KEY = "ticker-rail.v3";
+  var SKEY = "ticker-rail.settings.v2";
+
+  var listEl = document.getElementById("list");
+  var countEl = document.getElementById("count");
+  var asofEl = document.getElementById("asof");
+  var hintEl = document.getElementById("hint");
+  var undoSlot = document.getElementById("undoSlot");
+  var mapWrap = document.getElementById("mapWrap");
+  var form = document.getElementById("addForm");
+  var symbolInput = document.getElementById("symbol");
+  var exchangeSel = document.getElementById("exchange");
+  var refreshBtn = document.getElementById("refreshBtn");
+  var refreshLabel = document.getElementById("refreshLabel");
+  var proxyInput = document.getElementById("proxyInput");
+  var relayNow = document.getElementById("relayNow");
+  var testOut = document.getElementById("testOut");
+
+  var SEED = [
+    { ex: "NSE", sym: "NIFTY" }, { ex: "NSE", sym: "RELIANCE" }, { ex: "NSE", sym: "HDFCBANK" },
+    { ex: "FX_IDC", sym: "USDINR" }, { ex: "TVC", sym: "DXY" }, { ex: "TVC", sym: "US10Y" }
+  ];
+  var INR = { NSE: 1, BSE: 1 };
+  var USD = { NASDAQ: 1, NYSE: 1, AMEX: 1, CME_MINI: 1, COMEX: 1, NYMEX: 1 };
+  var FXISH = { FX: 1, FX_IDC: 1, OANDA: 1 };
+  var IN_INDEX = { NIFTY: "^NSEI", NIFTY50: "^NSEI", CNXBANK: "^NSEBANK", BANKNIFTY: "^NSEBANK", NIFTYBANK: "^NSEBANK", SENSEX: "^BSESN", CNXIT: "^CNXIT" };
+  var TVC = { DXY: "DX-Y.NYB", US10Y: "^TNX", US30Y: "^TYX", US05Y: "^FVX", US03MY: "^IRX", GOLD: "GC=F", SILVER: "SI=F", USOIL: "CL=F", UKOIL: "BZ=F", SPX: "^GSPC", NDX: "^NDX", DJI: "^DJI", VIX: "^VIX", NI225: "^N225", UKX: "^FTSE", DE40: "^GDAXI" };
+
+  var items = [];
+  var settings = { relay: "", lastGood: null };
+  var lastRemoved = null;
+  var busy = false;
+  var activeRelay = null;
+
+  // ---------- helpers ----------
+  function fullSymbol(it) { return it.ex ? it.ex + ":" + it.sym : it.sym; }
+  function chartUrl(it) { return "https://www.tradingview.com/chart/?symbol=" + encodeURIComponent(fullSymbol(it)); }
+  function isFx(it) { return !!FXISH[it.ex]; }
+  function ccy(it) {
+    if (INR[it.ex]) return "₹";
+    if (USD[it.ex]) return "$";
+    if (it.ex === "LSE") return "£";
+    if (it.ex === "EURONEXT") return "€";
+    return "";
+  }
+  function fmtPrice(v, it) {
+    if (v === null || v === undefined || isNaN(v)) return "—";
+    var dp = isFx(it) ? 4 : 2;
+    return ccy(it) + Number(v).toLocaleString(INR[it.ex] ? "en-IN" : "en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  }
+  function pctOf(it) {
+    if (!it.entry || it.last === null || it.last === undefined || isNaN(it.last)) return null;
+    return ((it.last - it.entry) / it.entry) * 100;
+  }
+  function fmtWhen(iso, withTime) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleString("en-GB", withTime
+      ? { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }
+      : { day: "numeric", month: "short" }).replace(",", "");
+  }
+  function say(msg, warn) { hintEl.textContent = msg || ""; hintEl.classList.toggle("warn", !!warn); }
+
+  function yfOf(it) {
+    if (it.yf) return it.yf;
+    var s = String(it.sym).toUpperCase().replace("/", "");
+    if (it.ex === "NSE") return IN_INDEX[s] || s + ".NS";
+    if (it.ex === "BSE") return IN_INDEX[s] || s + ".BO";
+    if (it.ex === "LSE") return s + ".L";
+    if (it.ex === "TSE") return s + ".T";
+    if (it.ex === "HKEX") return s + ".HK";
+    if (it.ex === "EURONEXT") return s + ".PA";
+    if (FXISH[it.ex]) return s + "=X";
+    if (it.ex === "TVC") return TVC[s] || s;
+    if (it.ex === "BINANCE") return s.replace(/USDT$/, "-USD");
+    if (it.ex === "COMEX" || it.ex === "NYMEX" || it.ex === "CME_MINI") return s + "=F";
+    return s;
+  }
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {} }
+  function saveSettings() { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch (e) {} }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) { var p = JSON.parse(raw); if (Array.isArray(p)) return p.filter(function (i) { return i && i.sym; }); }
+    } catch (e) {}
+    return null;
+  }
+
+  function icon(name) {
+    if (name === "grip") return '<svg width="8" height="16" viewBox="0 0 8 16" fill="currentColor" aria-hidden="true"><circle cx="1.6" cy="3" r="1.2"/><circle cx="6.4" cy="3" r="1.2"/><circle cx="1.6" cy="8" r="1.2"/><circle cx="6.4" cy="8" r="1.2"/><circle cx="1.6" cy="13" r="1.2"/><circle cx="6.4" cy="13" r="1.2"/></svg>';
+    if (name === "x") return '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"/></svg>';
+    return '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 11.5l3.2-3.6 2.4 2.1L13 4"/><path d="M9.6 4H13v3.4"/></svg>';
+  }
+
+  // ---------- render ----------
+  function render() {
+    listEl.innerHTML = "";
+    countEl.textContent = items.length + (items.length === 1 ? " ticker" : " tickers");
+
+    var newest = null;
+    items.forEach(function (it) { if (it.lastAt && (!newest || it.lastAt > newest)) newest = it.lastAt; });
+    if (newest) {
+      asofEl.textContent = "as of " + fmtWhen(newest, true);
+      asofEl.classList.toggle("stale", Date.now() - new Date(newest).getTime() > 24 * 3600 * 1000);
+    } else { asofEl.textContent = "no prices yet"; asofEl.classList.add("stale"); }
+
+    if (!items.length) {
+      var empty = document.createElement("li");
+      empty.className = "empty";
+      empty.textContent = "Nothing tracked yet. Add a symbol above.";
+      listEl.appendChild(empty);
+      renderMap();
+      return;
+    }
+
+    items.forEach(function (it, idx) {
+      var pct = pctOf(it);
+      var cls = pct === null ? "" : (pct > 0.0049 ? " up" : (pct < -0.0049 ? " down" : ""));
+      var txt = pct === null ? "—" : (pct >= 0 ? "+" : "−") + Math.abs(pct).toFixed(2) + "%";
+      var entryTxt = it.entry ? "entry " + fmtPrice(it.entry, it) + (it.entryAt ? " · " + fmtWhen(it.entryAt, false) : "") : "entry —";
+
+      var li = document.createElement("li");
+      li.className = "row";
+      li.dataset.index = String(idx);
+      li.innerHTML =
+        '<span class="handle" role="button" tabindex="0" aria-label="Reorder ' + fullSymbol(it) + ', arrow keys to move">' + icon("grip") + '</span>' +
+        '<span class="main">' +
+          '<a class="sym" href="' + chartUrl(it) + '" target="_blank" rel="noopener noreferrer">' + it.sym + '</a>' +
+          '<span class="meta">' +
+            '<span class="ex">' + (it.ex || "—") + '</span>' +
+            '<span class="entry" role="button" tabindex="0" title="Tap to set the entry price">' + entryTxt + '</span>' +
+            (it.err ? '<span class="err">' + (it.err === "symbol" ? "check symbol" : "no quote") + '</span>' : '') +
+          '</span>' +
+        '</span>' +
+        '<span class="nums">' +
+          '<span class="last' + (it.last === null || it.last === undefined ? " none" : "") + '">' + fmtPrice(it.last, it) + '</span>' +
+          '<span class="delta' + cls + '">' + txt + '</span>' +
+        '</span>' +
+        '<a class="icon-btn chart" href="' + chartUrl(it) + '" target="_blank" rel="noopener noreferrer" aria-label="Chart for ' + fullSymbol(it) + '">' + icon("chart") + '</a>' +
+        '<button type="button" class="icon-btn del" aria-label="Remove ' + fullSymbol(it) + '">' + icon("x") + '</button>';
+      listEl.appendChild(li);
+    });
+    renderMap();
+  }
+
+  function renderMap() {
+    mapWrap.innerHTML = "";
+    if (!items.length) return;
+    var head = document.createElement("div");
+    head.style.fontSize = "12px";
+    head.textContent = "Yahoo symbol used for each row — override any that won't quote:";
+    mapWrap.appendChild(head);
+    items.forEach(function (it, idx) {
+      var row = document.createElement("div");
+      row.className = "maprow";
+      var label = document.createElement("span");
+      label.textContent = fullSymbol(it);
+      var input = document.createElement("input");
+      input.type = "text";
+      input.value = yfOf(it);
+      input.spellcheck = false;
+      input.setAttribute("aria-label", "Yahoo symbol for " + fullSymbol(it));
+      input.addEventListener("change", function () {
+        var v = input.value.trim();
+        items[idx].yf = v && v !== yfOf({ sym: it.sym, ex: it.ex }) ? v : null;
+        save();
+      });
+      row.appendChild(label); row.appendChild(input);
+      mapWrap.appendChild(row);
+    });
+  }
+
+  // ---------- quotes ----------
+  // Relays are tried in order until one answers. Whichever works is remembered
+  // and tried first next time, so a dead relay costs one slow refresh, not a broken app.
+  var RELAYS = [
+    { id: "allorigins", label: "allorigins", build: function (u) { return "https://api.allorigins.win/raw?url=" + encodeURIComponent(u); } },
+    { id: "corsproxy", label: "corsproxy.io", build: function (u) { return "https://corsproxy.io/?url=" + encodeURIComponent(u); } },
+    { id: "codetabs", label: "codetabs", build: function (u) { return "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u); } },
+    { id: "allorigins2", label: "allorigins (wrapped)", build: function (u) { return "https://api.allorigins.win/get?url=" + encodeURIComponent(u); },
+      unwrap: function (j) { return typeof j.contents === "string" ? JSON.parse(j.contents) : j; } },
+    { id: "corslol", label: "cors.lol", build: function (u) { return "https://api.cors.lol/?url=" + encodeURIComponent(u); } },
+    { id: "thingproxy", label: "whateverorigin", build: function (u) { return "https://whateverorigin.org/get?url=" + encodeURIComponent(u); },
+      unwrap: function (j) { return typeof j.contents === "string" ? JSON.parse(j.contents) : j; } },
+    { id: "direct", label: "direct, no relay", build: function (u) { return u; } }
+  ];
+
+  function customRelay() {
+    var p = (settings.relay || "").trim();
+    if (!p) return null;
+    return {
+      id: "custom", label: "your relay",
+      build: function (u) { return p.indexOf("{url}") > -1 ? p.replace("{url}", encodeURIComponent(u)) : p + encodeURIComponent(u); }
+    };
+  }
+
+  function relayChain() {
+    var chain = [], c = customRelay();
+    if (c) chain.push(c);
+    RELAYS.forEach(function (r) { if (r.id === settings.lastGood) chain.push(r); });
+    RELAYS.forEach(function (r) { if (r.id !== settings.lastGood) chain.push(r); });
+    return chain;
+  }
+
+  function timedFetch(url, ms) {
+    if (typeof AbortController === "undefined") return fetch(url, { cache: "no-store" });
+    var ac = new AbortController();
+    var t = setTimeout(function () { ac.abort(); }, ms);
+    return fetch(url, { cache: "no-store", signal: ac.signal })
+      .then(function (r) { clearTimeout(t); return r; }, function (e) { clearTimeout(t); throw e; });
+  }
+
+  function yahooUrl(yf, host) {
+    return "https://" + host + ".finance.yahoo.com/v8/finance/chart/" + encodeURIComponent(yf) + "?range=1d&interval=1d";
+  }
+
+  function readQuote(j) {
+    if (!j || !j.chart) return { bad: true };
+    if (j.chart.error) return { missing: true };
+    var res = j.chart.result && j.chart.result[0], m = res && res.meta;
+    if (!m) return { missing: true };
+    var px = m.regularMarketPrice !== undefined ? m.regularMarketPrice : m.previousClose;
+    if (typeof px !== "number" || isNaN(px)) return { missing: true };
+    return { px: px, when: m.regularMarketTime ? new Date(m.regularMarketTime * 1000).toISOString() : new Date().toISOString() };
+  }
+
+  function markGood(r) {
+    activeRelay = r.label;
+    if (settings.lastGood !== r.id) { settings.lastGood = r.id; saveSettings(); }
+  }
+
+  // Resolves {px, when}; rejects "missing" (relay fine, symbol wrong) or "offline" (nothing answered).
+  function fetchQuote(yf) {
+    var chain = relayChain(), i = 0;
+    function attempt() {
+      if (i >= chain.length) return Promise.reject("offline");
+      var r = chain[i];
+      var host = i % 2 === 0 ? "query1" : "query2";
+      i++;
+      return timedFetch(r.build(yahooUrl(yf, host)), 9000)
+        .then(function (resp) { if (!resp.ok) throw new Error("http " + resp.status); return resp.text(); })
+        .then(function (txt) {
+          var j = JSON.parse(txt);
+          if (r.unwrap) j = r.unwrap(j);
+          var q = readQuote(j);
+          if (q.bad) throw new Error("shape");
+          markGood(r);
+          if (q.missing) throw { symbolError: true };
+          return q;
+        })
+        .catch(function (e) {
+          if (e && e.symbolError) throw "missing";
+          if (e === "missing" || e === "offline") throw e;
+          return attempt();
+        });
+    }
+    return attempt();
+  }
+
+  function fetchOne(it) {
+    return fetchQuote(yfOf(it)).then(function (q) {
+      it.last = q.px; it.lastAt = q.when; it.err = null;
+      if (!it.entry) { it.entry = q.px; it.entryAt = q.when; }
+    }, function (reason) {
+      it.err = reason === "missing" ? "symbol" : "offline";
+    });
+  }
+
+  // ---------- relay diagnostics ----------
+  function testRelays() {
+    var probe = items.length ? yfOf(items[0]) : "RELIANCE.NS";
+    var chain = relayChain();
+    testOut.innerHTML = "";
+    chain.forEach(function (r) {
+      var line = document.createElement("div");
+      line.className = "relayline";
+      line.innerHTML = '<span>' + r.label + '</span><span class="pending">testing…</span>';
+      testOut.appendChild(line);
+      var t0 = Date.now();
+      timedFetch(r.build(yahooUrl(probe, "query1")), 9000)
+        .then(function (resp) { if (!resp.ok) throw new Error("http"); return resp.text(); })
+        .then(function (txt) {
+          var j = JSON.parse(txt);
+          if (r.unwrap) j = r.unwrap(j);
+          var q = readQuote(j);
+          if (q.bad) throw new Error("shape");
+          line.lastChild.className = "ok";
+          line.lastChild.textContent = "✓ " + (Date.now() - t0) + " ms";
+        })
+        .catch(function () {
+          line.lastChild.className = "bad";
+          line.lastChild.textContent = "✕ no answer";
+        });
+    });
+  }
+
+  function refresh() {
+    if (busy || !items.length) return;
+    busy = true;
+    refreshBtn.disabled = true;
+    refreshBtn.classList.add("busy");
+    refreshLabel.textContent = "Fetching";
+    say("");
+
+    var queue = items.slice();
+    var active = 0, done = 0;
+    return new Promise(function (resolve) {
+      function next() {
+        if (!queue.length && active === 0) return resolve();
+        while (active < 4 && queue.length) {
+          active++;
+          fetchOne(queue.shift()).then(function () {
+            active--; done++;
+            refreshLabel.textContent = done + "/" + items.length;
+            next();
+          });
+        }
+      }
+      next();
+    }).then(function () {
+      busy = false;
+      refreshBtn.disabled = false;
+      refreshBtn.classList.remove("busy");
+      refreshLabel.textContent = "Refresh";
+      save();
+      render();
+      renderRelay();
+      var offline = items.filter(function (i) { return i.err === "offline"; });
+      var wrong = items.filter(function (i) { return i.err === "symbol"; });
+      if (offline.length === items.length) say("Every relay is unreachable right now. Open Settings and test them, or point the app at your own Cloudflare Worker.", true);
+      else if (wrong.length) say(wrong.map(fullSymbol).join(", ") + " didn't quote — fix the Yahoo symbol in Settings.", true);
+      else if (offline.length) say(offline.map(fullSymbol).join(", ") + " timed out. Tap Refresh again.", true);
+      else say("");
+    });
+  }
+  refreshBtn.addEventListener("click", refresh);
+
+  // ---------- add / remove ----------
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var raw = symbolInput.value.trim().toUpperCase().replace(/\s+/g, "");
+    if (!raw) { say("Type a symbol first."); return; }
+    var ex = exchangeSel.value, sym = raw;
+    if (raw.indexOf(":") > -1) { var p = raw.split(":"); ex = p[0]; sym = p.slice(1).join(":"); }
+    sym = sym.replace(/[^A-Z0-9._&!\-]/g, "");
+    if (!sym) { say("That symbol has no usable characters.", true); return; }
+
+    var it = { sym: sym, ex: ex, yf: null, entry: null, entryAt: null, last: null, lastAt: null, err: false, addedAt: new Date().toISOString() };
+    if (items.some(function (r) { return fullSymbol(r) === fullSymbol(it); })) { say(fullSymbol(it) + " is already on the rail.", true); return; }
+
+    items.push(it);
+    save(); render();
+    symbolInput.value = ""; symbolInput.focus();
+    say("Added " + fullSymbol(it) + " — fetching its price…");
+    fetchOne(it).then(function () { save(); render(); if (it.err) say(fullSymbol(it) + " didn't quote. Set its Yahoo symbol in Settings.", true); else say(""); });
+  });
+
+  listEl.addEventListener("click", function (e) {
+    var btn = e.target.closest(".del");
+    if (!btn) return;
+    var idx = Number(btn.closest("li.row").dataset.index);
+    lastRemoved = { item: items[idx], index: idx };
+    items.splice(idx, 1);
+    save(); render(); showUndo(lastRemoved.item); say("");
+  });
+
+  function showUndo(it) {
+    undoSlot.innerHTML = "";
+    var bar = document.createElement("div");
+    bar.className = "undo";
+    var t = document.createElement("span"); t.textContent = "Removed " + fullSymbol(it);
+    var b = document.createElement("button"); b.type = "button"; b.textContent = "Undo";
+    b.addEventListener("click", function () {
+      if (!lastRemoved) return;
+      items.splice(Math.min(lastRemoved.index, items.length), 0, lastRemoved.item);
+      lastRemoved = null; undoSlot.innerHTML = ""; save(); render();
+    });
+    bar.appendChild(t); bar.appendChild(b);
+    undoSlot.appendChild(bar);
+  }
+
+  // ---------- entry editing ----------
+  listEl.addEventListener("click", onEntry);
+  listEl.addEventListener("keydown", function (e) {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("entry")) { e.preventDefault(); onEntry(e); }
+  });
+  function onEntry(e) {
+    var span = e.target.closest(".entry");
+    if (!span) return;
+    var it = items[Number(span.closest("li.row").dataset.index)];
+    var input = document.createElement("input");
+    input.type = "text"; input.inputMode = "decimal"; input.className = "entry-edit";
+    input.value = it.entry ? String(it.entry) : "";
+    input.setAttribute("aria-label", "Entry price for " + fullSymbol(it));
+    span.replaceWith(input);
+    input.focus(); input.select();
+    var done = false;
+    function commit(keep) {
+      if (done) return; done = true;
+      if (keep) {
+        var v = parseFloat(input.value.replace(/[^0-9.\-]/g, ""));
+        if (!isNaN(v) && v > 0) { it.entry = v; it.entryAt = new Date().toISOString(); }
+        else if (input.value.trim() === "") { it.entry = null; it.entryAt = null; }
+        save();
+      }
+      render();
+    }
+    input.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter") { ev.preventDefault(); commit(true); }
+      if (ev.key === "Escape") { ev.preventDefault(); commit(false); }
+    });
+    input.addEventListener("blur", function () { commit(true); });
+  }
+
+  // ---------- copy ----------
+  document.getElementById("copyBtn").addEventListener("click", function (e) {
+    var text = items.map(function (it) {
+      var p = pctOf(it);
+      return fullSymbol(it) + (it.last != null ? "  last " + it.last : "") + (it.entry != null ? "  entry " + it.entry : "") + (p !== null ? "  " + (p >= 0 ? "+" : "") + p.toFixed(2) + "%" : "");
+    }).join("\n");
+    var btn = e.currentTarget;
+    function done(ok) { btn.textContent = ok ? "Copied" : "Copy failed"; setTimeout(function () { btn.textContent = "Copy list"; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    else done(false);
+  });
+
+  // ---------- drag reorder ----------
+  var drag = null;
+  listEl.addEventListener("pointerdown", function (e) {
+    var h = e.target.closest(".handle");
+    if (!h) return;
+    var li = h.closest("li.row");
+    if (!li) return;
+    e.preventDefault();
+    try { h.setPointerCapture(e.pointerId); } catch (err) {}
+    drag = { li: li, startY: e.clientY };
+    li.classList.add("dragging");
+  });
+  listEl.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    drag.li.style.transform = "translateY(" + (e.clientY - drag.startY) + "px)";
+    var rows = Array.prototype.slice.call(listEl.querySelectorAll("li.row"));
+    var cur = rows.indexOf(drag.li);
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i] === drag.li) continue;
+      var r = rows[i].getBoundingClientRect(), mid = r.top + r.height / 2;
+      if ((i < cur && e.clientY < mid) || (i > cur && e.clientY > mid)) {
+        listEl.insertBefore(drag.li, i < cur ? rows[i] : rows[i].nextSibling);
+        drag.startY = e.clientY; drag.li.style.transform = ""; break;
+      }
+    }
+  });
+  function endDrag() {
+    if (!drag) return;
+    drag.li.style.transform = ""; drag.li.classList.remove("dragging");
+    var order = Array.prototype.slice.call(listEl.querySelectorAll("li.row")).map(function (el) { return items[Number(el.dataset.index)]; }).filter(Boolean);
+    drag = null;
+    if (order.length === items.length) { items = order; save(); }
+    render();
+  }
+  listEl.addEventListener("pointerup", endDrag);
+  listEl.addEventListener("pointercancel", endDrag);
+  listEl.addEventListener("keydown", function (e) {
+    var h = e.target.closest(".handle");
+    if (!h || (e.key !== "ArrowUp" && e.key !== "ArrowDown")) return;
+    e.preventDefault();
+    var idx = Number(h.closest("li.row").dataset.index);
+    var to = e.key === "ArrowUp" ? idx - 1 : idx + 1;
+    if (to < 0 || to >= items.length) return;
+    items.splice(to, 0, items.splice(idx, 1)[0]);
+    save(); render();
+    var hs = listEl.querySelectorAll(".handle");
+    if (hs[to]) hs[to].focus();
+  });
+
+  // ---------- settings ----------
+  function renderRelay() {
+    relayNow.textContent = activeRelay ? "· using " + activeRelay : "";
+  }
+  try {
+    var s = JSON.parse(localStorage.getItem(SKEY) || "null");
+    if (s) {
+      if (typeof s.relay === "string") settings.relay = s.relay;
+      if (typeof s.lastGood === "string") settings.lastGood = s.lastGood;
+    }
+  } catch (e) {}
+  proxyInput.value = settings.relay;
+  proxyInput.addEventListener("change", function () {
+    settings.relay = proxyInput.value.trim();
+    settings.lastGood = null;
+    saveSettings();
+  });
+  document.getElementById("testBtn").addEventListener("click", testRelays);
+  renderRelay();
+
+  // ---------- boot ----------
+  var stored = load();
+  items = stored && stored.length ? stored : SEED.map(function (s2) {
+    return { sym: s2.sym, ex: s2.ex, yf: null, entry: null, entryAt: null, last: null, lastAt: null, err: false, addedAt: new Date().toISOString() };
+  });
+  save();
+  render();
+  if (!items.some(function (i) { return i.last != null; })) refresh();
+})();
+</script>
+</body>
+</html>
