@@ -518,7 +518,7 @@
     return new Promise(function (resolve) {
       function next() {
         if (!queue.length && active === 0) return resolve();
-        while (active < 4 && queue.length) {
+        while (active < 3 && queue.length) {
           active++;
           fetchOne(queue.shift()).then(function () {
             active--; done++;
@@ -528,6 +528,17 @@
         }
       }
       next();
+    }).then(function () {
+      // Free relays throttle bursts. Anything that came back empty gets one
+      // slower, spaced-out second pass before we call it a failure.
+      var again = items.filter(function (i) { return i.err === "offline"; });
+      if (!again.length) return;
+      refreshLabel.textContent = "retry " + again.length;
+      return again.reduce(function (chain, it) {
+        return chain.then(function () {
+          return new Promise(function (r) { setTimeout(r, 500); }).then(function () { return fetchOne(it); });
+        });
+      }, Promise.resolve());
     }).then(function () {
       busy = false;
       refreshBtn.disabled = false;
