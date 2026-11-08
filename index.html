@@ -104,6 +104,23 @@
   input.entry-edit { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; width: 92px; padding: 1px 4px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--accent); color: var(--ink); }
   .err { color: var(--down); font-size: 10.5px; }
 
+  .sortbar { display: flex; align-items: center; gap: 10px; padding: 7px 10px 7px 13px; border-bottom: 1px solid var(--line-soft); }
+  .sortbar label { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); }
+  .sortbar select { flex: 1; min-width: 0; font-size: 12px; padding: 6px 26px 6px 9px; }
+  ul.sorted .handle { visibility: hidden; pointer-events: none; }
+  li.grp { padding: 6px 12px 5px 14px; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); border-bottom: 1px solid var(--line-soft); }
+
+  .note { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .chips { display: inline-flex; gap: 4px; }
+  .chip { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: transparent; }
+  .chip:hover { color: var(--ink); border-color: var(--muted); }
+  .chip.on { font-weight: 600; }
+  .chip.buy.on { background: var(--up-bg); color: var(--up); border-color: var(--up); }
+  .chip.sell.on { background: var(--down-bg); color: var(--down); border-color: var(--down); }
+  .chip.track.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  input.note-input { flex: 1 1 130px; width: auto; font-size: 13px; padding: 5px 9px; border-radius: 6px; }
+  input.note-input::placeholder { color: var(--muted); opacity: .8; }
+
   .nums { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
   .last { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; font-weight: 600; font-size: 14.5px; white-space: nowrap; }
   .last.none { color: var(--muted); font-weight: 400; }
@@ -177,6 +194,10 @@
         <span id="refreshLabel">Refresh</span>
       </button>
     </div>
+    <div class="sortbar">
+      <label for="sortSel">Sort</label>
+      <select id="sortSel" aria-label="Sort the list"></select>
+    </div>
     <ul id="list"></ul>
     <div id="undoSlot"></div>
   </div>
@@ -224,6 +245,7 @@
   var proxyInput = document.getElementById("proxyInput");
   var relayNow = document.getElementById("relayNow");
   var testOut = document.getElementById("testOut");
+  var sortSel = document.getElementById("sortSel");
 
   var SEED = [
     { ex: "NSE", sym: "NIFTY" }, { ex: "NSE", sym: "RELIANCE" }, { ex: "NSE", sym: "HDFCBANK" },
@@ -236,7 +258,7 @@
   var TVC = { DXY: "DX-Y.NYB", US10Y: "^TNX", US30Y: "^TYX", US05Y: "^FVX", US03MY: "^IRX", GOLD: "GC=F", SILVER: "SI=F", USOIL: "CL=F", UKOIL: "BZ=F", SPX: "^GSPC", NDX: "^NDX", DJI: "^DJI", VIX: "^VIX", NI225: "^N225", UKX: "^FTSE", DE40: "^GDAXI" };
 
   var items = [];
-  var settings = { relay: "", lastGood: null };
+  var settings = { relay: "", lastGood: null, sort: "manual" };
   var lastRemoved = null;
   var busy = false;
   var activeRelay = null;
@@ -269,6 +291,74 @@
       ? { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }
       : { day: "numeric", month: "short" }).replace(",", "");
   }
+  // ---------- tags & sorting ----------
+  var TAGS = [{ id: "buy", label: "Buy" }, { id: "sell", label: "Sell" }, { id: "track", label: "Track" }];
+  var CLASS_ORDER = ["India equity", "US equity", "Other equity", "FX", "Rates & macro", "Futures", "Crypto", "Other"];
+  var SORTS = [
+    { id: "manual", label: "Manual (drag to reorder)" },
+    { id: "name-asc", label: "Name A \u2192 Z" },
+    { id: "name-desc", label: "Name Z \u2192 A" },
+    { id: "added-desc", label: "Date added \u00b7 newest first" },
+    { id: "added-asc", label: "Date added \u00b7 oldest first" },
+    { id: "tag", label: "Tag \u00b7 Buy, Sell, Track" },
+    { id: "class", label: "Category \u00b7 asset class" },
+    { id: "ex", label: "Exchange" },
+    { id: "move-desc", label: "% move \u00b7 best first" },
+    { id: "move-asc", label: "% move \u00b7 worst first" }
+  ];
+  function sortLabel(id) { for (var i = 0; i < SORTS.length; i++) if (SORTS[i].id === id) return SORTS[i].label; return ""; }
+  function assetClass(it) {
+    var e = it.ex;
+    if (e === "NSE" || e === "BSE") return "India equity";
+    if (e === "NASDAQ" || e === "NYSE" || e === "AMEX") return "US equity";
+    if (e === "LSE" || e === "TSE" || e === "HKEX" || e === "EURONEXT") return "Other equity";
+    if (FXISH[e]) return "FX";
+    if (e === "TVC") return "Rates & macro";
+    if (e === "CME_MINI" || e === "COMEX" || e === "NYMEX") return "Futures";
+    if (e === "BINANCE") return "Crypto";
+    return "Other";
+  }
+  function tagRank(it) { for (var i = 0; i < TAGS.length; i++) if (TAGS[i].id === it.tag) return i; return TAGS.length; }
+  function tagName(it) { return tagRank(it) < TAGS.length ? TAGS[tagRank(it)].label : "No tag"; }
+  function classRank(it) { return CLASS_ORDER.indexOf(assetClass(it)); }
+  function cmpStr(a, b) { return a < b ? -1 : (a > b ? 1 : 0); }
+
+  // Returns indexes into `items` in display order. `items` itself is never reordered by sorting,
+  // so Manual always gives back the drag order you built.
+  function viewOrder() {
+    var idxs = items.map(function (_, i) { return i; });
+    var s = settings.sort;
+    if (s === "manual") return idxs;
+    function nm(i) { return String(items[i].sym).toUpperCase(); }
+    function added(i) { var t = Date.parse(items[i].addedAt); return isNaN(t) ? 0 : t; }
+    idxs.sort(function (a, b) {
+      var A = items[a], B = items[b], r = 0;
+      if (s === "name-asc") r = cmpStr(nm(a), nm(b));
+      else if (s === "name-desc") r = cmpStr(nm(b), nm(a));
+      else if (s === "added-desc") r = added(b) - added(a);
+      else if (s === "added-asc") r = added(a) - added(b);
+      else if (s === "tag") r = tagRank(A) - tagRank(B);
+      else if (s === "class") r = classRank(A) - classRank(B);
+      else if (s === "ex") r = cmpStr(A.ex || "~", B.ex || "~");
+      else if (s === "move-desc" || s === "move-asc") {
+        var pa = pctOf(A), pb = pctOf(B);
+        if (pa === null && pb === null) r = 0;
+        else if (pa === null) return 1;
+        else if (pb === null) return -1;
+        else r = s === "move-desc" ? pb - pa : pa - pb;
+      }
+      if (r === 0 && (s === "tag" || s === "class" || s === "ex")) r = cmpStr(nm(a), nm(b));
+      return r || (a - b);
+    });
+    return idxs;
+  }
+  function groupOf(it) {
+    if (settings.sort === "tag") return tagName(it);
+    if (settings.sort === "class") return assetClass(it);
+    if (settings.sort === "ex") return it.ex || "No prefix";
+    return null;
+  }
+
   function say(msg, warn) { hintEl.textContent = msg || ""; hintEl.classList.toggle("warn", !!warn); }
 
   function yfOf(it) {
@@ -306,7 +396,9 @@
   // ---------- render ----------
   function render() {
     listEl.innerHTML = "";
-    countEl.textContent = items.length + (items.length === 1 ? " ticker" : " tickers");
+    listEl.classList.toggle("sorted", settings.sort !== "manual");
+    countEl.textContent = items.length + (items.length === 1 ? " ticker" : " tickers") +
+      (settings.sort !== "manual" ? " \u00b7 sorted" : "");
 
     var newest = null;
     items.forEach(function (it) { if (it.lastAt && (!newest || it.lastAt > newest)) newest = it.lastAt; });
@@ -324,7 +416,16 @@
       return;
     }
 
-    items.forEach(function (it, idx) {
+    var lastGroup = null;
+    viewOrder().forEach(function (idx) {
+      var it = items[idx];
+      var grp = groupOf(it);
+      if (grp !== null && grp !== lastGroup) {
+        var gh = document.createElement("li");
+        gh.className = "grp"; gh.textContent = grp;
+        listEl.appendChild(gh);
+        lastGroup = grp;
+      }
       var pct = pctOf(it);
       var cls = pct === null ? "" : (pct > 0.0049 ? " up" : (pct < -0.0049 ? " down" : ""));
       var txt = pct === null ? "—" : (pct >= 0 ? "+" : "−") + Math.abs(pct).toFixed(2) + "%";
@@ -348,7 +449,17 @@
           '<span class="delta' + cls + '">' + txt + '</span>' +
         '</span>' +
         '<a class="icon-btn chart" href="' + chartUrl(it) + '" target="_blank" rel="noopener noreferrer" aria-label="Chart for ' + fullSymbol(it) + '">' + icon("chart") + '</a>' +
-        '<button type="button" class="icon-btn del" aria-label="Remove ' + fullSymbol(it) + '">' + icon("x") + '</button>';
+        '<button type="button" class="icon-btn del" aria-label="Remove ' + fullSymbol(it) + '">' + icon("x") + '</button>' +
+        '<span class="note">' +
+          '<span class="chips" role="group" aria-label="Stance on ' + fullSymbol(it) + '">' +
+            TAGS.map(function (t) {
+              var on = it.tag === t.id;
+              return '<button type="button" class="chip ' + t.id + (on ? " on" : "") + '" data-tag="' + t.id + '" aria-pressed="' + on + '">' + t.label + '</button>';
+            }).join("") +
+          '</span>' +
+          '<input type="text" class="note-input" maxlength="280" placeholder="Why this ticker? Your thesis\u2026" aria-label="Note for ' + fullSymbol(it) + '" autocomplete="off">' +
+        '</span>';
+      li.querySelector(".note-input").value = it.note || "";
       listEl.appendChild(li);
     });
     renderMap();
@@ -567,7 +678,7 @@
     sym = sym.replace(/[^A-Z0-9._&!\-]/g, "");
     if (!sym) { say("That symbol has no usable characters.", true); return; }
 
-    var it = { sym: sym, ex: ex, yf: null, entry: null, entryAt: null, last: null, lastAt: null, err: false, addedAt: new Date().toISOString() };
+    var it = { sym: sym, ex: ex, yf: null, entry: null, entryAt: null, last: null, lastAt: null, err: false, addedAt: new Date().toISOString(), tag: "", note: "" };
     if (items.some(function (r) { return fullSymbol(r) === fullSymbol(it); })) { say(fullSymbol(it) + " is already on the rail.", true); return; }
 
     items.push(it);
@@ -634,11 +745,32 @@
     input.addEventListener("blur", function () { commit(true); });
   }
 
+  // ---------- tag + note ----------
+  listEl.addEventListener("click", function (e) {
+    var chip = e.target.closest(".chip");
+    if (!chip) return;
+    var idx = Number(chip.closest("li.row").dataset.index);
+    var t = chip.dataset.tag;
+    items[idx].tag = items[idx].tag === t ? "" : t;   // tap the active tag again to clear it
+    save(); render();
+    var again = listEl.querySelector('li.row[data-index="' + idx + '"] .chip[data-tag="' + t + '"]');
+    if (again) again.focus();
+  });
+  listEl.addEventListener("input", function (e) {
+    if (!e.target.classList || !e.target.classList.contains("note-input")) return;
+    var it = items[Number(e.target.closest("li.row").dataset.index)];
+    if (it) { it.note = e.target.value; save(); }     // saved as you type; no re-render so focus stays put
+  });
+  listEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.classList && e.target.classList.contains("note-input")) { e.preventDefault(); e.target.blur(); }
+  });
+
   // ---------- copy ----------
   document.getElementById("copyBtn").addEventListener("click", function (e) {
     var text = items.map(function (it) {
       var p = pctOf(it);
-      return fullSymbol(it) + (it.last != null ? "  last " + it.last : "") + (it.entry != null ? "  entry " + it.entry : "") + (p !== null ? "  " + (p >= 0 ? "+" : "") + p.toFixed(2) + "%" : "");
+      return fullSymbol(it) + (it.last != null ? "  last " + it.last : "") + (it.entry != null ? "  entry " + it.entry : "") + (p !== null ? "  " + (p >= 0 ? "+" : "") + p.toFixed(2) + "%" : "") +
+        (it.tag ? "  [" + it.tag.toUpperCase() + "]" : "") + (it.note ? "  \u2014 " + it.note : "");
     }).join("\n");
     var btn = e.currentTarget;
     function done(ok) { btn.textContent = ok ? "Copied" : "Copy failed"; setTimeout(function () { btn.textContent = "Copy list"; }, 1600); }
@@ -649,6 +781,7 @@
   // ---------- drag reorder ----------
   var drag = null;
   listEl.addEventListener("pointerdown", function (e) {
+    if (settings.sort !== "manual") return;
     var h = e.target.closest(".handle");
     if (!h) return;
     var li = h.closest("li.row");
@@ -684,7 +817,7 @@
   listEl.addEventListener("pointercancel", endDrag);
   listEl.addEventListener("keydown", function (e) {
     var h = e.target.closest(".handle");
-    if (!h || (e.key !== "ArrowUp" && e.key !== "ArrowDown")) return;
+    if (settings.sort !== "manual" || !h || (e.key !== "ArrowUp" && e.key !== "ArrowDown")) return;
     e.preventDefault();
     var idx = Number(h.closest("li.row").dataset.index);
     var to = e.key === "ArrowUp" ? idx - 1 : idx + 1;
@@ -704,6 +837,7 @@
     if (s) {
       if (typeof s.relay === "string") settings.relay = s.relay;
       if (typeof s.lastGood === "string") settings.lastGood = s.lastGood;
+      if (typeof s.sort === "string" && sortLabel(s.sort)) settings.sort = s.sort;
     }
   } catch (e) {}
   proxyInput.value = settings.relay;
@@ -712,13 +846,23 @@
     settings.lastGood = null;
     saveSettings();
   });
+  SORTS.forEach(function (o) {
+    var opt = document.createElement("option");
+    opt.value = o.id; opt.textContent = o.label;
+    sortSel.appendChild(opt);
+  });
+  sortSel.value = settings.sort;
+  sortSel.addEventListener("change", function () {
+    settings.sort = sortSel.value;
+    saveSettings(); render();
+  });
   document.getElementById("testBtn").addEventListener("click", testRelays);
   renderRelay();
 
   // ---------- boot ----------
   var stored = load();
   items = stored && stored.length ? stored : SEED.map(function (s2) {
-    return { sym: s2.sym, ex: s2.ex, yf: null, entry: null, entryAt: null, last: null, lastAt: null, err: false, addedAt: new Date().toISOString() };
+    return { sym: s2.sym, ex: s2.ex, yf: null, entry: null, entryAt: null, last: null, lastAt: null, err: false, addedAt: new Date().toISOString(), tag: "", note: "" };
   });
   save();
   render();
